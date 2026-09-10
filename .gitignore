@@ -1,0 +1,17 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+.idea/
+
+# Local market data and generated run outputs
+data/*.csv
+output/runs/
+output/stock_analysis.json
+output/stock_research.json
+output/stock_report.json
+output/agent_input.json
+output/*_stock_report.md
+
+# Local logs
+*.log
