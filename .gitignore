@@ -12,6 +12,11 @@ output/stock_research.json
 output/stock_report.json
 output/agent_input.json
 output/*_stock_report.md
+output/market_update_preview.csv
+output/factor_update_preview.csv
+output/market_update_report.json
+output/market_update_parts/
+output/data_backups/
 
 # Local logs
 *.log
