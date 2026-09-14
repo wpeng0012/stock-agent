@@ -6,6 +6,7 @@ import pandas as pd
 from factors.liquidity_factor import calculate_liquidity_factor
 from factors.trend_factor import calculate_trend_factor
 from factors.volume_factor import calculate_volume_factor
+from factors.technical_factor import calculate_technical_factor
 
 
 BASE_DIR = Path(__file__).resolve().parents[1]
@@ -36,10 +37,36 @@ FACTOR_COLUMNS = [
     "turnover",
     "prev_amount",
     "amount_ratio_1d",
+    "amount_ma5_prev",
+    "amount_ratio_5d",
     "MA5",
     "MA10",
     "MA20",
     "turnover_ma5",
+    "turnover_ma30_prev",
+    "turnover_ratio_30d",
+    "ma_alignment",
+    "ma5_ma10_cross",
+    "ma20_slope_5d",
+    "distance_ma20",
+    "return_1d",
+    "return_5d",
+    "return_20d",
+    "macd_dif",
+    "macd_dea",
+    "macd_hist",
+    "macd_cross",
+    "rsi6",
+    "kdj_k",
+    "kdj_d",
+    "kdj_j",
+    "kdj_cross",
+    "atr14",
+    "atr14_pct",
+    "drawdown_20d",
+    "drawdown_60d",
+    "relative_strength_5d",
+    "relative_strength_20d",
 ]
 
 
@@ -130,6 +157,7 @@ def build_factor_data(
     factor = calculate_volume_factor(price)
     factor = calculate_trend_factor(factor)
     factor = calculate_liquidity_factor(factor)
+    factor = calculate_technical_factor(factor)
 
     basic_file = stock_basic_file or STOCK_BASIC_FILE
     stock = load_stock_names(basic_file)

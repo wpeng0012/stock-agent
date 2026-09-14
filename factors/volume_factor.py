@@ -37,5 +37,12 @@ def calculate_volume_factor(df):
         df["prev_amount"]
     )
 
+    # 今日成交额与此前5个交易日平均成交额比较；基准排除当天。
+    df["amount_ma5_prev"] = (
+        df.groupby("code")["amount"]
+        .transform(lambda x: x.shift(1).rolling(5).mean())
+    )
+    df["amount_ratio_5d"] = df["amount"] / df["amount_ma5_prev"]
+
 
     return df

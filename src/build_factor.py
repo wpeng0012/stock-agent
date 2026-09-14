@@ -33,6 +33,7 @@ sys.path.append(BASE_DIR)
 from factors.volume_factor import calculate_volume_factor
 from factors.trend_factor import calculate_trend_factor
 from factors.liquidity_factor import calculate_liquidity_factor
+from factors.technical_factor import calculate_technical_factor
 
 
 print("项目目录:", BASE_DIR)
@@ -123,6 +124,8 @@ df = calculate_volume_factor(df)
 df = calculate_trend_factor(df)
 
 df = calculate_liquidity_factor(df)
+
+df = calculate_technical_factor(df)
 
 
 print(

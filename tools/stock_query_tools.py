@@ -14,6 +14,25 @@ REQUIRED_FIELDS = [
     "turnover_ma5", "MA10", "MA20",
 ]
 
+TECHNICAL_OUTPUT_FIELDS = [
+    "amount_ratio_5d", "turnover_ratio_30d", "MA5", "MA10", "MA20",
+    "ma_alignment", "ma5_ma10_cross", "ma20_slope_5d", "distance_ma20",
+    "return_1d", "return_5d", "return_20d", "macd_dif", "macd_dea",
+    "macd_hist", "macd_cross", "rsi6", "kdj_k", "kdj_d", "kdj_j",
+    "kdj_cross", "atr14", "atr14_pct", "drawdown_20d", "drawdown_60d",
+    "relative_strength_5d", "relative_strength_20d",
+]
+
+
+def _json_value(value):
+    if pd.isna(value):
+        return None
+    if isinstance(value, str):
+        return value
+    if isinstance(value, bool):
+        return value
+    return float(value)
+
 
 def resolve_stock(
     stock: str,
@@ -115,5 +134,10 @@ def query_stock(
             "turnover_ma5": float(row["turnover_ma5"]),
             "MA10": None if pd.isna(row["MA10"]) else float(row["MA10"]),
             "MA20": None if pd.isna(row["MA20"]) else float(row["MA20"]),
+            **{
+                field: _json_value(row[field])
+                for field in TECHNICAL_OUTPUT_FIELDS
+                if field in row.index
+            },
         },
     }

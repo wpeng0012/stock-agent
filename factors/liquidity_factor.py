@@ -23,5 +23,14 @@ def calculate_liquidity_factor(df):
 
     )
 
+    # 用此前30个交易日作为个股自身换手基准，排除当天。
+    df["turnover_ma30_prev"] = (
+        df.groupby("code")["turnover"]
+        .transform(lambda x: x.shift(1).rolling(30).mean())
+    )
+    df["turnover_ratio_30d"] = (
+        df["turnover"] / df["turnover_ma30_prev"]
+    )
+
 
     return df
