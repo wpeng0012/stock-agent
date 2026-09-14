@@ -1,0 +1,4 @@
+interface:
+  display_name: "A股事件研究"
+  short_description: "按需研究公告、董秘问答和新闻，并返回可追溯证据"
+  default_prompt: "研究指定A股最近的重要公告和新闻，区分事实、影响和不确定性。"

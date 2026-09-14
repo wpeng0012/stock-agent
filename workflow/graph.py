@@ -7,6 +7,7 @@ from datetime import datetime
 from workflow.task_router import classify_task
 from tools.stock_query_tools import query_stock
 from tools.explanation_tools import explain_stock_score
+from services.event_research_service import run_event_research
 
 
 class StockState(TypedDict, total=False):
@@ -108,6 +109,44 @@ as_of={current_as_of}
     }
 
 def quant_node(state: StockState) -> StockState:
+    if state.get("task_type") == "event_research":
+        result = run_event_research(
+            stock_code=state.get("stock_code") or "",
+            stock_name=state.get("stock_name"),
+            end_date=state.get("as_of"),
+        )
+        return {"result": result, "status": result["status"]}
+
+    if state.get("task_type") == "screen_research":
+        quant_result = run_quant_agent(
+            as_of=state.get("as_of"),
+            top_n=min(state.get("top_n", 3), 3),
+        )
+        if quant_result.get("status") != "completed":
+            return {"result": quant_result, "status": quant_result["status"]}
+        research_results = []
+        for stock in quant_result.get("stocks", [])[:3]:
+            research_results.append(run_event_research(
+                stock_code=stock["code"],
+                stock_name=stock.get("name"),
+                end_date=state.get("as_of"),
+            ))
+        research_statuses = [item.get("status") for item in research_results]
+        combined_status = (
+            "completed"
+            if research_statuses and all(status == "completed" for status in research_statuses)
+            else "partial"
+        )
+        return {
+            "result": {
+                "status": combined_status,
+                "task_type": "screen_research",
+                "quant_result": quant_result,
+                "research_results": research_results,
+            },
+            "status": combined_status,
+        }
+
     if state.get("task_type") == "stock_query":
         result = query_stock(
             stock=state.get("stock_code") or state.get("stock_name") or "",

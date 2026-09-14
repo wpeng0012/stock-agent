@@ -17,6 +17,8 @@ output/factor_update_preview.csv
 output/market_update_report.json
 output/market_update_parts/
 output/data_backups/
+output/research_cache/
+output/research_temp/
 
 # Local logs
 *.log
